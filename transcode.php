@@ -21,7 +21,12 @@ error_reporting(E_ALL);
 ini_set('display_errors', '0');   // Fehler nie ins JSON mischen
 header('Content-Type: application/json; charset=utf-8');
 
-$config = @include __DIR__ . '/config.php';
+// Config: bevorzugt außerhalb des Web-Roots, Fallback lokal (s. push2ig.php)
+$configFile = dirname(__DIR__, 2) . '/push2ig-config.php';
+if (!is_file($configFile)) {
+    $configFile = __DIR__ . '/config.php';
+}
+$config = @include $configFile;
 if (!is_array($config)) {
     http_response_code(500);
     echo json_encode(['error' => 'config']);

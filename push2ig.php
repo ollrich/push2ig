@@ -38,7 +38,24 @@ if (php_sapi_name() !== 'cli') {
 }
 
 // ─── Config ────────────────────────────────────────────────────────
-$config = require __DIR__ . '/config.php';
+/**
+ * Config laden – bevorzugt von AUSSERHALB des Web-Roots (2 Ebenen über diesem
+ * Ordner, z. B. /www/htdocs/wXXXX/push2ig-config.php), damit die Secrets selbst
+ * bei einer PHP-Fehlkonfiguration nie über HTTP ausgeliefert werden können.
+ * Fallback: config.php im Script-Ordner (durch .htaccess geschützt).
+ */
+function p2iLoadConfig(): array {
+    $outside = dirname(__DIR__, 2) . '/push2ig-config.php';
+    $local   = __DIR__ . '/config.php';
+    $file    = is_file($outside) ? $outside : $local;
+    $cfg     = @include $file;
+    if (!is_array($cfg)) {
+        http_response_code(500);
+        exit("Config nicht ladbar: $file\n");
+    }
+    return $cfg;
+}
+$config = p2iLoadConfig();
 
 $GLOBALS['p2i_last_error'] = null;
 

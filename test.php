@@ -17,8 +17,7 @@
 declare(strict_types=1);
 error_reporting(E_ALL);
 
-$config = require __DIR__ . '/config.php';
-require __DIR__ . '/push2ig.php';
+require __DIR__ . '/push2ig.php';   // lädt auch die Config (inkl. Web-Root-Suchpfad)
 
 ensureTables();
 getPixelfedToken();   // ggf. aus Config seeden

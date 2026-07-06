@@ -17,7 +17,12 @@
 declare(strict_types=1);
 ini_set('display_errors', '0');
 
-$config  = @include __DIR__ . '/config.php';
+// Config: bevorzugt außerhalb des Web-Roots, Fallback lokal (s. push2ig.php)
+$configFile = dirname(__DIR__, 2) . '/push2ig-config.php';
+if (!is_file($configFile)) {
+    $configFile = __DIR__ . '/config.php';
+}
+$config  = @include $configFile;
 $secret  = is_array($config) ? (string) ($config['meta_app_secret'] ?? '') : '';
 $contact = is_array($config) ? trim((string) ($config['contact_email'] ?? '')) : '';
 $pubBase = is_array($config) ? rtrim((string) ($config['public_base_url'] ?? ''), '/') : '';

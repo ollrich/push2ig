@@ -11,7 +11,13 @@
 declare(strict_types=1);
 error_reporting(E_ALL);
 
-$config = require __DIR__ . '/config.php';
+// Config: bevorzugt außerhalb des Web-Roots, Fallback lokal (s. push2ig.php)
+$configFile = dirname(__DIR__, 2) . '/push2ig-config.php';
+if (!is_file($configFile)) {
+    $configFile = __DIR__ . '/config.php';
+}
+echo "── Config: $configFile\n";
+$config = require $configFile;
 $db = $config['db'];
 
 echo "── Verbinde mit MySQL ({$db['user']}@{$db['host']}/{$db['name']}) …\n";
