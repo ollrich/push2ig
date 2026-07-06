@@ -1,0 +1,33 @@
+# push2ig – Web-Zugriff auf Shared Hosting einschränken.
+#
+# Der Cron ruft push2ig.php per URL auf (z. B. All-Inkl), daher MUSS
+# push2ig.php über HTTP erreichbar bleiben. Geschützt wird es über den
+# geheimen ?key=<run_key> in der Cron-URL (siehe config.php).
+#
+# Alles andere – Config, Logs, Lock, Doku und die Helfer-Scripte – wird
+# komplett gegen Web-Zugriff gesperrt.
+
+# Sensible Dateien: Credentials & Laufzeit-Ausgaben
+<FilesMatch "(^config.*\.php$|\.log$|\.log\.1$|\.lock$|^\.htaccess$|\.md$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Helfer-Scripte: nur per CLI/SSH, nicht über den Browser
+<FilesMatch "^(seed|test|tests|dbcheck)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Kein Verzeichnis-Listing
+Options -Indexes

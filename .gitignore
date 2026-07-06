@@ -1,0 +1,17 @@
+# Geheimnisse & Laufzeitdaten – NIE committen
+config.php
+*.log
+*.log.1
+push2ig.lock
+media/
+
+# enthält Original-Credentials/Token – nie committen
+pixelfed-to-instagram-briefing.md
+
+# persönliche/instanzspezifische Dateien (gehören nicht ins öffentliche Repo)
+robots.txt
+datenschutz.html
+datenloeschung.html
+
+# lokale Editor-/Session-Settings
+.claude/
