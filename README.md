@@ -156,9 +156,14 @@ endgültig) — dafür gibt es `reprocess <id>`.
 
 ## Sicherheit
 
-- `config.php` (alle Secrets) ist per `.htaccess` gegen Web-Zugriff gesperrt;
-  Helfer-Scripte ebenso. `push2ig.php` verlangt im Web den `run_key`,
-  `transcode.php` das `transcode_secret`, `data-deletion.php` verifiziert die
-  Meta-Signatur.
+- **Config-Ablage:** Alle Einstiegspunkte suchen die Config zuerst **zwei Ebenen
+  über dem Script-Ordner** (`../../push2ig-config.php`, also außerhalb des
+  Web-Roots) und fallen sonst auf `config.php` im Ordner zurück. Empfohlen:
+  `config.php` einmal dorthin verschieben (`mv config.php ../../push2ig-config.php`)
+  — dann sind die Secrets selbst bei einer PHP-Fehlkonfiguration nie web-erreichbar.
+- `config.php` im Ordner (Fallback) ist zusätzlich per `.htaccess` gegen
+  Web-Zugriff gesperrt; Helfer-Scripte ebenso. `push2ig.php` verlangt im Web den
+  `run_key`, `transcode.php` das `transcode_secret`, `data-deletion.php`
+  verifiziert die Meta-Signatur.
 - Der Mirror braucht Pixelfed-**write** nur für das Entfernen des Control-Hashtags
   und das Erstellen von Stories.
